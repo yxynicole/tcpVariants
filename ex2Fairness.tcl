@@ -32,11 +32,11 @@ set n4 [$ns node]
 set n5 [$ns node]
 
 #Create links between the nodes 
-$ns duplex-link n0 n1 10Mb 10ms DropTail
-$ns duplex-link n1 n2 10Mb 10ms DropTail  
-$ns duplex-link n1 n4 10Mb 10ms DropTail
-$ns duplex-link n5 n2 10Mb 10ms DropTail
-$ns duplex-link n2 n3 10Mb 10ms DropTail
+$ns duplex-link $n0 $n1 10Mb 10ms DropTail
+$ns duplex-link $n1 $n2 10Mb 10ms DropTail  
+$ns duplex-link $n1 $n4 10Mb 10ms DropTail
+$ns duplex-link $n5 $n2 10Mb 10ms DropTail
+$ns duplex-link $n2 $n3 10Mb 10ms DropTail
 
 #Set Queue Size of link (n2-n3) to 10 
 #$ns queue-limit $n2 $n3 10
@@ -59,31 +59,31 @@ $cbr set random_ false
 
 #Setup a TCP connection between n0 and n3
 set tcp_0_3 [new Agent/TCP]
-$tcp set class_ 2
+$tcp_0_3 set class_ 2
 $ns attach-agent $n0 $tcp_0_3
 set sink [new Agent/TCPSink]
 $ns attach-agent $n3 $sink
 $ns connect $tcp_0_3 $sink
-$tcp set fid_ 1
+$tcp_0_3 set fid_ 1
 
 #Setup a TCP connection between n4 and n5
 set tcp_4_5 [new Agent/TCP]
-$tcp set class_ 2
+$tcp_4_5 set class_ 2
 $ns attach-agent $n4 $tcp_4_5
 set sink [new Agent/TCPSink]
 $ns attach-agent $n5 $sink
 $ns connect $tcp_4_5 $sink
-$tcp set fid_ 1
+$tcp_4_5 set fid_ 1
 
 #Setup a FTP over TCP connection for node 0 and 3
 set ftp_0_3 [new Application/FTP]
-$ftp attach-agent $tcp_0_3
-$ftp set type_ FTP
+$ftp_0_3 attach-agent $tcp_0_3
+$ftp_0_3 set type_ FTP
 
 #Setup a FTP over TCP connection for node 4 and 5
 set ftp_4_5 [new Application/FTP]
-$ftp attach-agent $tcp_4_5
-$ftp set type_ FTP
+$ftp_4_5 attach-agent $tcp_4_5
+$ftp_4_5 set type_ FTP
 
 #Schedule events for the CBR and FTP agents
 $ns at cbr_str_time "$cbr start"
@@ -100,10 +100,6 @@ set tcp_4_5_stop_time 5
 
 #Call the finish procedure after 5 seconds of simulation time
 $ns at 5.0 "finish"
-
-#Print CBR packet size and interval
-puts "CBR packet size = [$cbr set packet_size_]"
-puts "CBR interval = [$cbr set interval_]"
 
 #Run the simulation
 $ns run
