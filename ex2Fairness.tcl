@@ -14,6 +14,15 @@ proc finish {} {
 	exit 0
 }
 
+#Create independent variables
+set cbr_rate 0
+set cbr_str_time 0
+set cbr_stop_time 5
+set tcp_0_3_str_time 0
+set tcp_0_3_stop_time 5
+set tcp_4_5_str_time 0
+set tcp_4_5_stop_time 5
+
 #Create six nodes 
 set n0 [$ns node]
 set n1 [$ns node]
@@ -24,7 +33,7 @@ set n5 [$ns node]
 
 #Create links between the nodes 
 $ns duplex-link n0 n1 10Mb 10ms DropTail
-$ns duplex-link n1 n2 10Mb 10ms DropTail 
+$ns duplex-link n1 n2 10Mb 10ms DropTail  
 $ns duplex-link n1 n4 10Mb 10ms DropTail
 $ns duplex-link n5 n2 10Mb 10ms DropTail
 $ns duplex-link n2 n3 10Mb 10ms DropTail
@@ -45,37 +54,46 @@ set cbr [new Application/Traffic CBR]
 $cbr attach-agent $udp
 $cbr set type_ CBR
 $cbr set packet_size_ 1000
-$cbr set rate 1mb
+$cbr set rate cbr_rate
 $cbr set random_ false
 
 #Setup a TCP connection between n0 and n3
-set tcp [new Agent/TCP]
+set tcp_0_3 [new Agent/TCP]
 $tcp set class_ 2
-$ns attach-agent $n0 $tcp
+$ns attach-agent $n0 $tcp_0_3
 set sink [new Agent/TCPSink]
 $ns attach-agent $n3 $sink
-$ns connect $tcp $sink
+$ns connect $tcp_0_3 $sink
 $tcp set fid_ 1
 
 #Setup a TCP connection between n4 and n5
-set tcp [new Agent/TCP]
+set tcp_4_5 [new Agent/TCP]
 $tcp set class_ 2
-$ns attach-agent $n4 $tcp
+$ns attach-agent $n4 $tcp_4_5
 set sink [new Agent/TCPSink]
 $ns attach-agent $n5 $sink
-$ns connect $tcp $sink
+$ns connect $tcp_4_5 $sink
 $tcp set fid_ 1
 
-#Setup a FTP over TCP connection
-set ftp [new Application/FTP]
-$ftp attach-agent $tcp
+#Setup a FTP over TCP connection for node 0 and 3
+set ftp_0_3 [new Application/FTP]
+$ftp attach-agent $tcp_0_3
+$ftp set type_ FTP
+
+#Setup a FTP over TCP connection for node 4 and 5
+set ftp_4_5 [new Application/FTP]
+$ftp attach-agent $tcp_4_5
 $ftp set type_ FTP
 
 #Schedule events for the CBR and FTP agents
-$ns at 0.0 "$cbr start"
-$ns at 0.0 "$ftp start"
-$ns at 5.0 "$ftp stop"
-$ns at 5.0 "$cbr stop"
+$ns at cbr_str_time "$cbr start"
+$ns at tcp_0_3_str_time "$ftp_0_3 start"
+$ns at tcp_4_5_str_time "$ftp_4_5 start"
+$ns at tcp_0_3_stop_time "$ftp_0_3 stop"
+$ns at tcp_4_5_stop_time "$ftp_4_5 stop"
+$ns at cbr_stop_time "$cbr stop"
+
+set tcp_4_5_stop_time 5
 
 #Detach tcp and sink agents (not really necessary)
 #$ns at 4.5 "$ns detach-agent $n0 $tcp ; $ns detach-agent $n3 $sink"
