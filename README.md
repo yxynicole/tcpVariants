@@ -5,7 +5,7 @@ Performance Analysis of TCP Variants
 - [ ] the random number aspect so the flows start at different times
 - [x] TCL file for experiment 2
 - [x] TCL file for experiment 3 
-
+- [ ] for each tcl script, code section: call the finish procedure, replace 5.0 with a variable 
 ## Jeff todo:
 - [ ] review trace file analysis code to calculate drops, average bandwith, and round trip time for experiment 1
 - [ ] review experiment 2 and 3 and determine what tweaks to will be need to tracefile analysis code
