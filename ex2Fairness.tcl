@@ -15,13 +15,15 @@ proc finish {} {
 }
 
 #Create independent variables
+set tcp_variant ""
 set cbr_rate 0
-set cbr_str_time 0
+set cbr_start_time 0
 set cbr_stop_time 5
-set tcp_0_3_str_time 0
+set tcp_0_3_start_time 0
 set tcp_0_3_stop_time 5
-set tcp_4_5_str_time 0
+set tcp_4_5_start_time 0
 set tcp_4_5_stop_time 5
+
 
 #Create six nodes 
 set n0 [$ns node]
@@ -86,9 +88,9 @@ $ftp_4_5 attach-agent $tcp_4_5
 $ftp_4_5 set type_ FTP
 
 #Schedule events for the CBR and FTP agents
-$ns at cbr_str_time "$cbr start"
-$ns at tcp_0_3_str_time "$ftp_0_3 start"
-$ns at tcp_4_5_str_time "$ftp_4_5 start"
+$ns at cbr_start_time "$cbr start"
+$ns at tcp_0_3_start_time "$ftp_0_3 start"
+$ns at tcp_4_5_start_time "$ftp_4_5 start"
 $ns at tcp_0_3_stop_time "$ftp_0_3 stop"
 $ns at tcp_4_5_stop_time "$ftp_4_5 stop"
 $ns at cbr_stop_time "$cbr stop"
