@@ -1,7 +1,7 @@
 # tcpVariants
 Performance Analysis of TCP Variants 
 ## Xinyu todo:
-- [ ] to paramertize the running of our TCL file so we can pass in on the command line things like the TCP variant, cbr bandwidth.  
+- [x] to paramertize the running of our TCL file so we can pass in on the command line things like the TCP variant, cbr bandwidth.  
 - [ ] the random number aspect so the flows start at different times
 - [x] TCL file for experiment 2
 - [x] TCL file for experiment 3 
