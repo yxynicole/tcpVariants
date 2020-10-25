@@ -3,8 +3,6 @@ import argparse
 import os 
 
 CBR_RATES = [1,2,3,4,5]
-TCPS = {'tcp':'Agent/TCP'}
-
 
 EXPERIMENTS = {
     'ex1':{
@@ -24,7 +22,13 @@ EXPERIMENTS = {
             [2,0,0,2],
             [2,4,0,8],
             [2,4,6,8],
-        ]
+        ],
+        'variants':{
+            'tahoe':'Agent/TCP',
+            'reno':'Agent/TCP/Reno',
+            'newreno':'Agent/TCP/Newreno',
+            'vegas':'Agent/TCP/Vegas'
+        }
     },
     'ex2':{
         'template':'ex2.template',
@@ -44,7 +48,13 @@ EXPERIMENTS = {
             [2,0,0,2,10,2],
             [2,4,0,8,10,2],
             [2,4,6,8,10,2],
-        ]
+        ],
+        'variants':{
+            'tahoe':'Agent/TCP',
+            'reno':'Agent/TCP/Reno',
+            'newreno':'Agent/TCP/Newreno',
+            'vegas':'Agent/TCP/Vegas'
+        }
     },
     'ex3':{
         'template':'ex3.template',
@@ -64,13 +74,17 @@ EXPERIMENTS = {
             [2,0,0,2,'DropTail'],
             [2,4,0,8,'RAD'],
             [2,4,6,8,'DropTail'],
-        ]
+        ],
+        'variants':{
+            'sack':'Agent/TCP/Sack1 ',
+            'reno':'Agent/TCP/Reno ',
+        }
     }
 }
 
-def write_to(file, conent):
+def write_to(file, content):
     f = open(file, 'w')
-    f.write(conent)
+    f.write(content)
     f.close()
 
 def main(args):
@@ -81,23 +95,22 @@ def main(args):
     simulations = experiment['simulations']
 
     os.system('mkdir -p output')
-
+    # get index and simulation(array) at the same time
     for i, simulation in enumerate(simulations):
-        format_args = dict(zip(parameters, simulation))
+        format_args = dict(zip(parameters, simulation)) # format_args = {cbr_start_time:2, cbr_stop_time:0, ...}
         for cbr_rate in CBR_RATES:
-            for name, variant in TCPS.items():
+            for name, variant in experiment['variants'].items(): # add tcp variant, cbr rate, outputfile into format_args
                 format_args['tcp_variant'] = variant
                 format_args['cbr_rate'] = cbr_rate
-                format_args['output_file'] = 'output/{}_{}_cbr{}_{}.tr'.format(args.experiment, name, cbr_rate, i)
-                script_content = template.format(**format_args)
+                format_args['output_file'] = 'output/{}_{}_cbr{}_simulation{}.tr'.format(args.experiment, name, cbr_rate, i)
+                script_content = template.format(**format_args) # unpack arguments as key-value pairs 
                 write_to('{}.tcl'.format(args.experiment), script_content)
                 os.system('ns {}.tcl'.format(args.experiment))
 
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-
-    parser.add_argument('--experiment','-e', required=True)
+  
+    parser.add_argument('--experiment','-e',choices=['ex1','ex2','ex3'], required=True)
 
     args = parser.parse_args()
 
