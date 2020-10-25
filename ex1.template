@@ -2,7 +2,7 @@
 set ns [new Simulator]
 
 #Open the Trace file
-set tf [open ex1_output.tr w]
+set tf [open {output_file} w]
 $ns trace-all $tf
 
 #Define a 'finish' procedure

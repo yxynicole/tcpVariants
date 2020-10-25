@@ -2,7 +2,7 @@
 set ns [new Simulator]
 
 #Open the trace file
-set tf [open ex2_output.tr w]
+set tf [open {output_file} w]
 $ns trace-all $tf
 
 #Define a 'finish' procedure
@@ -49,7 +49,7 @@ $cbr set rate {cbr_rate}
 $cbr set random_ false
 
 #Setup a TCP connection between n0 and n3
-set tcp_0_3 [new Agent/{tcp_variant}]
+set tcp_0_3 [new {tcp_variant}]
 $tcp_0_3 set class_ 2
 $ns attach-agent $n0 $tcp_0_3
 set sink [new Agent/TCPSink]
@@ -58,7 +58,7 @@ $ns connect $tcp_0_3 $sink
 $tcp_0_3 set fid_ 1
 
 #Setup a TCP connection between n4 and n5
-set tcp_4_5 [new Agent/{tcp_variant}]
+set tcp_4_5 [new {tcp_variant}]
 $tcp_4_5 set class_ 2
 $ns attach-agent $n4 $tcp_4_5
 set sink [new Agent/TCPSink]
