@@ -64,15 +64,15 @@ EXPERIMENTS = {
             'queue_algor'
         ],
         'simulations':[
-            [2,0,0,10,'RAD'],
+            [2,0,0,10,'RED'],
             [2,2,2,10,'DropTail'],
-            [2,4,4,10,'RAD'],
+            [2,4,4,10,'RED'],
             [2,0,0,6,'DropTail'],
-            [2,0,4,8,'RAD'],
+            [2,0,4,8,'RED'],
             [2,2,6,6,'DropTail'],
-            [2,2,4,8,'RAD'],
+            [2,2,4,8,'RED'],
             [2,0,0,2,'DropTail'],
-            [2,4,0,8,'RAD'],
+            [2,4,0,8,'RED'],
             [2,4,6,8,'DropTail'],
         ],
         'variants':{
