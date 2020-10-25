@@ -95,11 +95,6 @@ $ns at tcp_0_3_stop_time "$ftp_0_3 stop"
 $ns at tcp_4_5_stop_time "$ftp_4_5 stop"
 $ns at cbr_stop_time "$cbr stop"
 
-set tcp_4_5_stop_time 5
-
-#Detach tcp and sink agents (not really necessary)
-#$ns at 4.5 "$ns detach-agent $n0 $tcp ; $ns detach-agent $n3 $sink"
-
 #Call the finish procedure after 5 seconds of simulation time
 $ns at 5.0 "finish"
 
