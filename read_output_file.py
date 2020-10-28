@@ -3,22 +3,27 @@
 # Node where the TCP traffic is originating from
 TCP_SEND_NODE = "0"
 
-# Calculates the number of dropped packets
+# Calculates packet drop rate
 # A dropped packet is a tcp or ack packet that begins with a "d" in the tracefile
-def calculate_num_dropped_packets(trace_data):
+# Packet drop rate = num_dropped_packets / num_outgoing_tcp_packets
+def calculate_packet_drop_rate(trace_data):
 
-    num_dropped_packets = 0
+    num_dropped_packets = 0.0
+    num_outgoing_tcp_packets = 0.0
 
     for line in trace_data:
-        if line[0] == "d" and ("tcp" in line or "ack" in line):
+        parsed_line = line.split() #splits by whitespace
+        if is_dropped_packet(parsed_line):
             num_dropped_packets += 1
+        elif is_outgoing_tcp_packet(parsed_line, TCP_SEND_NODE):
+            num_outgoing_tcp_packets += 1
 
-    return num_dropped_packets
+    return num_dropped_packets / num_outgoing_tcp_packets
 
 # Assumes TCP packet data portion is 1000 bytes for now
 # Note: We can update this function to account for varying packet sizes if necessary
 # num_seconds is the number of seconds the simulation is run for
-# Returns average throughput in KB / seconds
+# Returns average throughput in Megabits / seconds
 def calculate_average_throughput(trace_data, num_seconds):
 
     packets_sent = 0
@@ -28,10 +33,18 @@ def calculate_average_throughput(trace_data, num_seconds):
         if parsed_line[0] == "-" and parsed_line[2] == TCP_SEND_NODE and parsed_line[4] == "tcp":
             packets_sent += 1
 
-    return packets_sent / 1000.00 / num_seconds
+    #Assumes each tcp packet has 1000 bytes of data
+    return packets_sent / num_seconds / 1000 * 8
+
+# Determines if the line is a dropped tcp (including ack) packets
+# Returns True if yes, False otherwise
+def is_dropped_packet(line):
+    return line[0] == "d" and ("tcp" in line or "ack" in line)
+
 
 # Takes in a line from the tracefile and a node number and determines
-# if the line is dequeing a TCP packet from the node
+# if the line is dequeing a TCP packet from the node. Returns True if yes,
+# False otherwise
 def is_outgoing_tcp_packet(line, send_node):
     return line[0] == "-" and line[2] == send_node and line[4] == "tcp"
 
@@ -91,11 +104,10 @@ if __name__ == '__main__':
     trace_data = tracefile.readlines()
     print("Num items in line: " + str(len(trace_data[0].split())))
 
-    num_dropped_packets = calculate_num_dropped_packets(trace_data)
-    average_throughput = calculate_average_throughput(trace_data, 5)
+    packet_drop_rate = calculate_packet_drop_rate(trace_data)
+    average_throughput = calculate_average_throughput(trace_data, 5.0)
     average_RTT = calculate_average_RTT(trace_data)
     tracefile.close()
-    print("The number of dropped packets is: " + str(num_dropped_packets))
-    print("The average throughput in KB/second is: " + str(average_throughput))
-    print("The average RTT for TCP packets is: " + str(average_RTT))
-
+    print("The packet drop rate is: " + str(packet_drop_rate))
+    print("The average throughput in megabits per second is " + str(average_throughput))
+    print("The average RTT for TCP packets in seconds is: " + str(average_RTT))
