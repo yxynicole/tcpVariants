@@ -26,13 +26,13 @@ set n5 [$ns node]
 $ns queue-limit $n0 $n1 40
 $ns queue-limit $n1 $n2 40
 $ns queue-limit $n2 $n3 40
-$ns queue-limit $n0 $n3 40
-$ns queue-limit $n4 $n5 40
+$ns queue-limit $n2 $n5 40
+$ns queue-limit $n1 $n4 40
 $ns queue-limit $n1 $n0 40
 $ns queue-limit $n2 $n1 40
 $ns queue-limit $n3 $n2 40
-$ns queue-limit $n3 $n0 40
-$ns queue-limit $n5 $n4 40
+$ns queue-limit $n5 $n2 40
+$ns queue-limit $n4 $n1 40
 
 #Create links between the nodes 
 $ns duplex-link $n0 $n1 10Mb 10ms DropTail
