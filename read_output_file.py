@@ -26,15 +26,15 @@ def calculate_packet_drop_rate(trace_data):
 # Returns average throughput in Megabits / seconds
 def calculate_average_throughput(trace_data, num_seconds):
 
-    packets_sent = 0
+    packets_received = 0
 
     for line in trace_data:
         parsed_line = line.split() #splits by whitespace
-        if parsed_line[0] == "-" and parsed_line[2] == TCP_SEND_NODE and parsed_line[4] == "tcp":
-            packets_sent += 1
+        if parsed_line[0] == "r" and parsed_line[3] == "3" and parsed_line[4] == "tcp":
+            packets_received += 1
 
     #Assumes each tcp packet has 1000 bytes of data
-    return packets_sent / num_seconds / 1000 * 8
+    return packets_received * 8 / 1000 / num_seconds
 
 # Determines if the line is a dropped tcp (including ack) packets
 # Returns True if yes, False otherwise
