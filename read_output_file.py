@@ -33,6 +33,7 @@ def calculate_average_throughput(trace_data, num_seconds):
         if parsed_line[0] == "r" and parsed_line[3] == "3" and parsed_line[4] == "tcp":
             packets_received += 1
 
+    print(str(packets_received))
     #Assumes each tcp packet has 1000 bytes of data
     return packets_received * 8 / 1000 / num_seconds
 
@@ -51,9 +52,9 @@ def is_outgoing_tcp_packet(line, send_node):
 # Take in a line from the tracefile, a node number, and sequence number
 # and returns True if the line represents an ack back to that node for
 # the specified sequence number, False otherwise
-def is_tcp_ack(line, send_node, seq_num):
+def is_tcp_ack(line, send_node):
     return line[0] == "r" and line[3] == TCP_SEND_NODE and \
-       line[4] == "ack" and line[10] == seq_num
+       line[4] == "ack"
 
 
 # Takes in a full tracefile and calculates the average RTT for TCP packets
@@ -61,6 +62,10 @@ def is_tcp_ack(line, send_node, seq_num):
 # Packets that are re-transmitted are not counted, as the acks will be
 # ambiguous
 def calculate_average_RTT(trace_data):
+
+    # Dictionary of tcp waiting to pair
+    # {seq_num, time sent in seconds}
+    waiting_to_pair = {}
 
     # Dictionary to store successful round trips
     # {Key, Value}
@@ -81,20 +86,24 @@ def calculate_average_RTT(trace_data):
         if is_outgoing_tcp_packet(parsed_line, TCP_SEND_NODE):
             send_time = float(parsed_line[1])
             seq_num = parsed_line[10]
-            if seq_num in round_trips.keys(): #retransmission, don't count in avg
-                round_trips.pop(seq_num) #remove the seq_num from the list of successful RTTs
+            if seq_num in waiting_to_pair.keys() or seq_num in round_trips.keys():
                 retransmission_seq_num.append(seq_num)
-                continue
             elif seq_num in retransmission_seq_num: # retransmission
                 continue
             else:
-                next_line_num = i + 1
-                for j in range(next_line_num, len(trace_data)):
-                    potential_ack_line = trace_data[j].split() # splits by whitespace
-                    if is_tcp_ack(potential_ack_line, TCP_SEND_NODE, seq_num):
-                        rec_ack_time = float(potential_ack_line[1])
-                        round_trips[seq_num] = rec_ack_time - send_time
-                        break
+                waiting_to_pair[seq_num] = send_time
+                continue
+
+        elif is_tcp_ack(parsed_line, TCP_SEND_NODE):
+            seq_num_rec = parsed_line[10]
+            rec_ack_time = float(parsed_line[1])
+            round_trips[seq_num_rec] = rec_ack_time - waiting_to_pair[seq_num_rec]
+
+    keyList = round_trips.keys()
+
+    for key in keyList:
+        if key in retransmission_seq_num:
+            round_trips.pop(key)
 
     return (sum(round_trips.values()) / len(round_trips))
 
@@ -105,7 +114,7 @@ if __name__ == '__main__':
     print("Num items in line: " + str(len(trace_data[0].split())))
 
     packet_drop_rate = calculate_packet_drop_rate(trace_data)
-    average_throughput = calculate_average_throughput(trace_data, 5.0)
+    average_throughput = calculate_average_throughput(trace_data, 12.0)
     average_RTT = calculate_average_RTT(trace_data)
     tracefile.close()
     print("The packet drop rate is: " + str(packet_drop_rate))
