@@ -101,8 +101,8 @@ $tcp_0_3 tracevar cwnd_
 $tcp_4_5 attach $tf
 $tcp_4_5 tracevar cwnd_
 
-#Call the finish procedure after 12 seconds of simulation time
-$ns at 12.0 "finish"
+#Call the finish procedure after 10 seconds of simulation time
+$ns at 10.0 "finish"
 
 #Run the simulation
 $ns run
