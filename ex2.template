@@ -22,6 +22,13 @@ set n3 [$ns node]
 set n4 [$ns node]
 set n5 [$ns node]
 
+#Create links between the nodes 
+$ns duplex-link $n0 $n1 10Mb 10ms DropTail
+$ns duplex-link $n1 $n2 10Mb 10ms DropTail  
+$ns duplex-link $n1 $n4 10Mb 10ms DropTail
+$ns duplex-link $n5 $n2 10Mb 10ms DropTail
+$ns duplex-link $n2 $n3 10Mb 10ms DropTail
+
 #Set the Queue Size of the link
 $ns queue-limit $n0 $n1 40
 $ns queue-limit $n1 $n2 40
@@ -33,13 +40,6 @@ $ns queue-limit $n2 $n1 40
 $ns queue-limit $n3 $n2 40
 $ns queue-limit $n5 $n2 40
 $ns queue-limit $n4 $n1 40
-
-#Create links between the nodes 
-$ns duplex-link $n0 $n1 10Mb 10ms DropTail
-$ns duplex-link $n1 $n2 10Mb 10ms DropTail  
-$ns duplex-link $n1 $n4 10Mb 10ms DropTail
-$ns duplex-link $n5 $n2 10Mb 10ms DropTail
-$ns duplex-link $n2 $n3 10Mb 10ms DropTail
 
 #Setup a UDP connection 
 set udp [new Agent/UDP]
