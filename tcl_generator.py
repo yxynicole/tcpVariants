@@ -25,10 +25,10 @@ EXPERIMENTS = {
             [1.5,12,0,12],
         ],
         'variants':{
-            'tahoe':'Agent/TCP',
-            'reno':'Agent/TCP/Reno',
-            'newreno':'Agent/TCP/Newreno',
-            'vegas':'Agent/TCP/Vegas'
+            'tahoe': {'tcp_variant': 'Agent/TCP'},
+            'reno': {'tcp_variant': 'Agent/TCP/Reno'},
+            'newreno': {'tcp_variant': 'Agent/TCP/Newreno'},
+            'vegas': {'tcp_variant': 'Agent/TCP/Vegas'},
         }
     },
     'ex2':{
@@ -51,10 +51,10 @@ EXPERIMENTS = {
             [0,12,3,12,1,12],
         ],
         'variants':{
-            'tahoe':'Agent/TCP',
-            'reno':'Agent/TCP/Reno',
-            'newreno':'Agent/TCP/Newreno',
-            'vegas':'Agent/TCP/Vegas'
+            'reno-reno': {'tcp_variant1':'Agent/TCP/Reno', 'tcp_variant2':'Agent/TCP/Reno'},
+            'newreno-reno': {'tcp_variant1':'Agent/TCP/Newreno', 'tcp_variant2':'Agent/TCP/Reno'},
+            'vegas-vegas': {'tcp_variant1':'Agent/TCP/Vegas', 'tcp_variant2':'Agent/TCP/Vegas'},
+            'newreno-vegas': {'tcp_variant1':'Agent/TCP/Newreno', 'tcp_variant2':'Agent/TCP/Vegas'},
         }
     },
     'ex3':{
@@ -71,8 +71,8 @@ EXPERIMENTS = {
             [.75,12,0,12,'DropTail'],
         ],
         'variants':{
-            'sack':'Agent/TCP/Sack1',
-            'reno':'Agent/TCP/Reno',
+            'sack': {'tcp_variant': 'Agent/TCP/Sack1'},
+            'reno': {'tcp_variant': 'Agent/TCP/Reno'},
         }
     }
 }
@@ -95,7 +95,7 @@ def main(args):
         format_args = dict(zip(parameters, simulation)) # format_args = {cbr_start_time:2, cbr_stop_time:0, ...}
         for cbr_rate in CBR_RATES:
             for name, variant in experiment['variants'].items(): # add tcp variant, cbr rate, outputfile into format_args
-                format_args['tcp_variant'] = variant
+                format_args.update(variant)
                 format_args['cbr_rate'] = cbr_rate
                 format_args['output_file'] = 'output/{}_{}_cbr{}_simulation{}.tr'.format(args.experiment, name, cbr_rate, i)
                 script_content = template.format(**format_args) # unpack arguments as key-value pairs 
