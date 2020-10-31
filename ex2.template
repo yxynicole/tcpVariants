@@ -47,7 +47,7 @@ $ns attach-agent $n1 $udp
 set null [new Agent/Null]
 $ns attach-agent $n2 $null
 $ns connect $udp $null
-$udp set fid_ 2
+$udp set fid_ 1
 
 #Setup a CBR over UDP connection
 set cbr [new Application/Traffic/CBR]
@@ -65,7 +65,7 @@ $ns attach-agent $n0 $tcp_0_3
 set sink [new Agent/TCPSink]
 $ns attach-agent $n3 $sink
 $ns connect $tcp_0_3 $sink
-$tcp_0_3 set fid_ 1
+$tcp_0_3 set fid_ 2
 
 #Setup a TCP connection between n4 and n5
 set tcp_4_5 [new {tcp_variant2}]
@@ -75,7 +75,7 @@ $ns attach-agent $n4 $tcp_4_5
 set sink [new Agent/TCPSink]
 $ns attach-agent $n5 $sink
 $ns connect $tcp_4_5 $sink
-$tcp_4_5 set fid_ 1
+$tcp_4_5 set fid_ 3
 
 #Setup a FTP over TCP connection for node 0 and 3
 set ftp_0_3 [new Application/FTP]
@@ -102,7 +102,7 @@ $tcp_4_5 attach $tf
 $tcp_4_5 tracevar cwnd_
 
 #Call the finish procedure after 12 seconds of simulation time
-$ns at 12.0 "finish"
+$ns at 8.0 "finish"
 
 #Run the simulation
 $ns run
