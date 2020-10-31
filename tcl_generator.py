@@ -2,7 +2,7 @@
 import argparse
 import os 
 
-CBR_RATES = [1,2,3,4,5,6,7,8,9]
+CBR_RATES = [1,2,3,4,5]
 
 EXPERIMENTS = {
     'ex1':{
@@ -39,22 +39,22 @@ EXPERIMENTS = {
             'tcp_4_5_start_time', 'tcp_4_5_stop_time',
         ],
         'simulations':[
-            [0,12,0,12,0,12],
-            [0,12,0.5,12,0,12],
-            [0,12,1.5,12,0,12],
-            [0,12,1,12,1.5,12],
-            [0,12,1,12,2,12],
-            [0,12,0,12,.5,12],
-            [0,12,0,12,1,12],
-            [0,12,1.5,12,1,12],
-            [0,12,2,12,1,12],
-            [0,12,3,12,1,12],
+            [0,10,0,12,0,10],
+            [0,10,0.5,10,0,10],
+            [0,10,1.5,10,0,10],
+            [0,10,1,10,1.5,10],
+            [0,10,1,10,2,10],
+            [0,10,0,10,1,10],
+            [0,10,0,12,1.5,10],
+            [0,10,1.5,10,1,10],
+            [0,10,2,10,1,10],
+            [0,10,3,10,1,10],
         ],
-        'variants':{
-            'tahoe':'Agent/TCP',
-            'reno':'Agent/TCP/Reno',
-            'newreno':'Agent/TCP/Newreno',
-            'vegas':'Agent/TCP/Vegas'
+       'variants':{
+            'Reno_Reno':['Agent/TCP/Reno', 'Agent/TCP/Reno'],
+            'NewReno_Reno':['Agent/TCP/Newreno', 'Agent/TCP/Reno'],
+            'Vegas_Vegas':['Agent/TCP/Vegas', 'Agent/TCP/Vegas'],
+            'NewReno_Vegas':['Agent/TCP/Newreno', 'Agent/TCP/Vegas'],
         }
     },
     'ex3':{
