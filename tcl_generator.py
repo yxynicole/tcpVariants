@@ -25,10 +25,10 @@ EXPERIMENTS = {
             [1.5,12,0,12],
         ],
         'variants':{
-            'Reno_Reno':['Agent/TCP/Reno', 'Agent/TCP/Reno'],
-            'NewReno_Reno':['Agent/TCP/Newreno', 'Agent/TCP/Reno'],
-            'Vegas_Vegas':['Agent/TCP/Vegas', 'Agent/TCP/Vegas'],
-            'NewReno_Vegas':['Agent/TCP/Newreno', 'Agent/TCP/Vegas']
+            'tahoe':'Agent/TCP',
+            'reno':'Agent/TCP/Reno',
+            'newreno':'Agent/TCP/Newreno',
+            'vegas':'Agent/TCP/Vegas'
         }
     },
     'ex2':{
