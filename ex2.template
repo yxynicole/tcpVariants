@@ -50,7 +50,7 @@ $ns connect $udp $null
 $udp set fid_ 2
 
 #Setup a CBR over UDP connection
-set cbr [new Application/Traffic CBR]
+set cbr [new Application/Traffic/CBR]
 $cbr attach-agent $udp
 $cbr set type_ CBR
 $cbr set packet_size_ 1000
