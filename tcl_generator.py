@@ -35,8 +35,8 @@ EXPERIMENTS = {
         'template':'ex2.template',
         'parameters':[
             'cbr_start_time', 'cbr_stop_time',
-            'tcp_0_3_start_time', 'tcp_0_3_stop_time',
-            'tcp_4_5_start_time', 'tcp_4_5_stop_time',
+            'tcp_1_4_start_time', 'tcp_1_4_stop_time',
+            'tcp_5_6_start_time', 'tcp_5_6_stop_time',
         ],
         'simulations':[
             [0,10,0,12,0,10],
