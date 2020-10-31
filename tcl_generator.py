@@ -25,10 +25,10 @@ EXPERIMENTS = {
             [1.5,12,0,12],
         ],
         'variants':{
-            'tahoe':'Agent/TCP',
-            'reno':'Agent/TCP/Reno',
-            'newreno':'Agent/TCP/Newreno',
-            'vegas':'Agent/TCP/Vegas'
+            'Reno_Reno':['Agent/TCP/Reno', 'Agent/TCP/Reno'],
+            'NewReno_Reno':['Agent/TCP/Newreno', 'Agent/TCP/Reno'],
+            'Vegas_Vegas':['Agent/TCP/Vegas', 'Agent/TCP/Vegas'],
+            'NewReno_Vegas':['Agent/TCP/Newreno', 'Agent/TCP/Vegas']
         }
     },
     'ex2':{
@@ -95,7 +95,8 @@ def main(args):
         format_args = dict(zip(parameters, simulation)) # format_args = {cbr_start_time:2, cbr_stop_time:0, ...}
         for cbr_rate in CBR_RATES:
             for name, variant in experiment['variants'].items(): # add tcp variant, cbr rate, outputfile into format_args
-                format_args['tcp_variant'] = variant
+                format_args['tcp_variant1'] = variant[0]
+                format_args['tcp_variant2'] = variant[1]
                 format_args['cbr_rate'] = cbr_rate
                 format_args['output_file'] = 'output/{}_{}_cbr{}_simulation{}.tr'.format(args.experiment, name, cbr_rate, i)
                 script_content = template.format(**format_args) # unpack arguments as key-value pairs 
