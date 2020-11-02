@@ -50,7 +50,7 @@ set cbr [new Application/Traffic/CBR]
 $cbr attach-agent $udp
 $cbr set type_ CBR
 $cbr set packet_size_ 1000
-$cbr set rate {cbr_rate}
+$cbr set rate_ {cbr_rate}
 $cbr set random_ false
 
 #Setup a TCP connection between n0 to n3

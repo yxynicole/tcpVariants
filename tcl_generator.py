@@ -2,7 +2,7 @@
 import argparse
 import os 
 
-CBR_RATES = [1,2,3,4,5,6,7,8,9]
+CBR_RATES = ["1mb","3mb","5mb","7mb","8mb"]
 
 EXPERIMENTS = {
     'ex1':{
